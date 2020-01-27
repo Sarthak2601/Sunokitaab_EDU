@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Sunokitaab</string>
+
+
+    <!--  login and signup  -->
+
+    <string name="set_new_password_button">Set New password</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="log_in_button">Log In</string>
+
+    <string name="email_address_hint">Email address</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="enter_otp_hint">Enter otp</string>
+
+    <string name="otp_prompt_forgot_pass">A unique OTP has been sent to your email-ID. Please enter it below</string>
+
+    <string name="terms_and_condition_checkbox">I agree to all the terms and conditions</string>
+    <string name="sign_up_prompt">Let\'s know you, shall we?</string>
+    <string name="password_hint">Password</string>
+
+
+    <string name="title_favourites"></string>
+    <string name="title_home"></string>
+    <string name="title_search"></string>
+    <string name="title_downloaded"></string>
+
+
+</resources>

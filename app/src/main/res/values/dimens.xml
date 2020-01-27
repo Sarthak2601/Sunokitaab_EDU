@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="login_prompts">20sp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fifteenDP">15dp</dimen>
+    <dimen name="fifteenSP">15sp</dimen>
+    <dimen name="eightyDP">80dp</dimen>
+    <dimen name="sixtyDP">60dp</dimen>
+    <dimen name="tenDP">10dp</dimen>
+    <dimen name="twentyDP">20dp</dimen>
+    <dimen name="ThirtyFiveSP">35sp</dimen>
+    <dimen name="text20">20sp</dimen>
+</resources>
