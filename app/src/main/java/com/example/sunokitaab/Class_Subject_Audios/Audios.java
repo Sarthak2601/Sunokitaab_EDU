@@ -51,7 +51,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
     Button download;
 
 
-
+    private ApiKey_handler apiKeyHandler = new ApiKey_handler();
     private boolean flag;
     private int ste;
     private MediaPlayer mediaPlayer;
@@ -85,7 +85,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
 //    private final String RSS_to_Json_API = "https://feed2json.org/convert?url=https%3A%2F%2Fwww.podcasts.com%2Frss_feed%2F";
 
     private final String API_KEY = "rxgdkvedigso5ufz2orgvm99jhmuimybnnfiizf8";
-    private final String FEED_ITEMS_COUNT = "50";
+    private final String FEED_ITEMS_COUNT = "90";
     //RSS link
     private static String RSS_link="";
     String RSS = "";
@@ -152,7 +152,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         url_get_data.append(RSS_link);
 //        Log.d("api" , url_get_data.toString());
         url_get_data.append("&api_key=");
-        url_get_data.append(API_KEY);
+        url_get_data.append(apiKeyHandler.route(RSS_link.substring(RSS_link.length()-1)));
         url_get_data.append("&count=");
         url_get_data.append(FEED_ITEMS_COUNT);
         loadRSSAsync.execute(url_get_data.toString());
