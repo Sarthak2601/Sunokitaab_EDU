@@ -169,6 +169,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
 
         curSong = url;
         audioname.setText(curTitle);
+        audioname.setVisibility(View.VISIBLE);
         curTitle = title;
         ste = 0;
         Toast.makeText(getApplicationContext(),"Buffering",Toast.LENGTH_SHORT).show();

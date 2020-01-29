@@ -14,13 +14,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fifteenDP"
         android:orientation="vertical"
-        app:cardCornerRadius="@dimen/fifteenDP">
+        app:cardCornerRadius="@dimen/fifteenDP"
+        android:elevation="8dp"
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:id="@+id/linearlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/black"
+            android:alpha="0.9"
             android:orientation="vertical">
 
             <LinearLayout
@@ -62,7 +65,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_logo" />
+                        app:srcCompat="@drawable/logo" />
 
                 </LinearLayout>
             </LinearLayout>

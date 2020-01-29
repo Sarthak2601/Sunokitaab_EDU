@@ -2,14 +2,21 @@ package com.example.sunokitaab.Download_Audio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,12 +32,38 @@ public class DownloadedFragment extends Fragment {
     private ListView listView;
     private String songNames[];
     private Context context;
+    TextView tv_audioname;
+    Button btnPausePlay;
+    ImageButton btnfwd, btnbwd;
+    SeekBar seekBar;
+    static MediaPlayer mediaPlayer;
+    Handler handler;
+    Runnable runnable;
+    TextView time,duration;
+    private String audioTitle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_downloaded, null);
 
+        audioTitle = "songName";
+
+        if(mediaPlayer!=null){
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        tv_audioname = rootview.findViewById(R.id.tv_audioname);
+        btnPausePlay = rootview.findViewById(R.id.btn_pauseee);
+        btnfwd = rootview.findViewById(R.id.btn_ffwddd);
+        btnbwd = rootview.findViewById(R.id.btn_prev);
+        handler = new Handler();
+        seekBar = rootview.findViewById(R.id.seekBar);
+        time = rootview.findViewById(R.id.timee);
+        duration = rootview.findViewById(R.id.durationnn);
         listView = rootview.findViewById(R.id.list);
         context = getContext().getApplicationContext();
 
@@ -45,11 +78,92 @@ public class DownloadedFragment extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,R.layout.songs_layout,R.id.textView,songNames );
         listView.setAdapter(adapter);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser){
+                    mediaPlayer.seekTo(progress);
+                    setTime();
+
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                if(mediaPlayer!=null){
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }
+
+                Uri uri = Uri.parse(songs.get(position).toString());
+
+                //String songNames[] = bundle.getStringArray("songNames");
+                mediaPlayer = MediaPlayer.create(getActivity(), uri);
+
+
+                audioTitle =    songs.get(position).getName().replace(".mp3", "");
+                tv_audioname.setText(audioTitle);
+                tv_audioname.setVisibility(View.VISIBLE);
+
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        seekBar.setMax(mp.getDuration());
+                        mp.start();
+                        changeSeekBar();
+                        setTime();
+
+                    }
+                });
+
+
+
+                btnfwd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() + 5000);
+                        setTime();
+                    }
+                });
+                btnbwd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 5000);
+                        setTime();
+                    }
+                });
+                btnPausePlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mediaPlayer.isPlaying()){
+                            mediaPlayer.pause();
+                            btnPausePlay.setText("Play");
+                            setTime();
+                        }
+                        else {
+                            mediaPlayer.start();
+                            btnPausePlay.setText("Pause");
+                            changeSeekBar();
+                            setTime();
+                        }
+                    }
+                });
+
+
+                /*
                 Bundle bundle = new Bundle();
                 bundle.putStringArray("songNames",songNames);
                 startActivity(
@@ -57,11 +171,21 @@ public class DownloadedFragment extends Fragment {
                             .putExtra("position", position)
                             .putExtra("list",songs));
 
+                 */
+
+
+
             }
         });
 
         return rootview;
 
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
     }
 
@@ -81,5 +205,66 @@ public class DownloadedFragment extends Fragment {
         }
 
         return arrayList;
+    }
+
+    private void setTime() {
+
+        if(mediaPlayer!=null) {
+
+
+            long songCurrentTime = mediaPlayer.getCurrentPosition();
+            long songTotalTime = mediaPlayer.getDuration();
+
+            long secondT = (songCurrentTime / 1000) % 60;
+            long minuteT = (songCurrentTime / (1000 * 60)) % 60;
+
+            long secondD = (songTotalTime / 1000) % 60;
+            long minuteD = (songTotalTime / (1000 * 60)) % 60;
+
+            String timerD = String.format("%02d:%02d", minuteD, secondD);
+            String timerT = String.format("%02d:%02d", minuteT, secondT);
+
+
+            time.setText("" + String.valueOf(timerT));
+            duration.setText("" + String.valueOf(timerD));
+        }
+
+    }
+
+    private void changeSeekBar() {
+
+
+        if(mediaPlayer!=null){
+            seekBar.setProgress(mediaPlayer.getCurrentPosition());
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    changeSeekBar();
+                    setTime();
+                }
+            };
+            handler.postDelayed(runnable,1000);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        //changeSeekBar();
+
+        if(mediaPlayer!=null){
+
+           if(mediaPlayer.isPlaying()) {
+               mediaPlayer.stop();
+               mediaPlayer.reset();
+               mediaPlayer.release();
+               mediaPlayer = null;
+           }
+
+        }
+
+
+
     }
 }

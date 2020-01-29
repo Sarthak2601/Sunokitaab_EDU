@@ -34,7 +34,9 @@
             android:id="@+id/tv_audioname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone"
+            android:textColor="@android:color/black"/>
 
 
         <LinearLayout
