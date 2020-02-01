@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -51,7 +52,7 @@ public class MainUi extends AppCompatActivity {
             }
         }
 
-
+        onNewIntent(getIntent());
 
 
         navigation = findViewById(R.id.nav_view);
@@ -89,6 +90,16 @@ public class MainUi extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if(intent != null){
+            String data = intent.getStringExtra("data");
+            Log.i("tag", "onNewIntent: "+data);
+
+        }
+    }
 
     private boolean loadFragment(Fragment fragment) {
 

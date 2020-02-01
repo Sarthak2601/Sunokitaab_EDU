@@ -1,9 +1,14 @@
 package com.example.sunokitaab.Download_Audio;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -21,13 +26,19 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.sunokitaab.MainActivity;
 import com.example.sunokitaab.R;
+import com.example.sunokitaab.Services.OnClearFromRecentService;
+import com.example.sunokitaab.mediaPlayer_notification.CreateNotification;
+import com.example.sunokitaab.mediaPlayer_notification.Playable;
+import com.example.sunokitaab.mediaPlayer_notification.Track;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
-public class DownloadedFragment extends Fragment {
+public class DownloadedFragment extends Fragment implements Playable {
 
     private ListView listView;
     private String songNames[];
@@ -41,6 +52,10 @@ public class DownloadedFragment extends Fragment {
     Runnable runnable;
     TextView time,duration;
     private String audioTitle;
+    NotificationManager notificationManager;
+
+    List<Track> list;
+    int Pos = 0;
 
     @Nullable
     @Override
@@ -74,6 +89,14 @@ public class DownloadedFragment extends Fragment {
         songNames = new String[songs.size()];
         for(int i =0; i <songs.size(); ++i){
             songNames[i] = songs.get(i).getName().toString().replace(".mp3","");
+        }
+
+        populateTrack(file);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            createChannel();
+            context.registerReceiver(broadcastReceiver,new IntentFilter("TRACKS_TRACKS"));
+            context.startService(new Intent(context, OnClearFromRecentService.class));
+
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,R.layout.songs_layout,R.id.textView,songNames );
@@ -114,6 +137,7 @@ public class DownloadedFragment extends Fragment {
                 mediaPlayer = MediaPlayer.create(getActivity(), uri);
 
 
+
                 audioTitle =    songs.get(position).getName().replace(".mp3", "");
                 tv_audioname.setText(audioTitle);
                 tv_audioname.setVisibility(View.VISIBLE);
@@ -125,6 +149,7 @@ public class DownloadedFragment extends Fragment {
                         mp.start();
                         changeSeekBar();
                         setTime();
+                        onTrackPlay();
 
                     }
                 });
@@ -150,6 +175,7 @@ public class DownloadedFragment extends Fragment {
                     public void onClick(View v) {
                         if(mediaPlayer.isPlaying()){
                             mediaPlayer.pause();
+                            onTrackPause();
                             btnPausePlay.setText("Play");
                             setTime();
                         }
@@ -157,12 +183,17 @@ public class DownloadedFragment extends Fragment {
                             mediaPlayer.start();
                             btnPausePlay.setText("Pause");
                             changeSeekBar();
+                            onTrackPlay();
                             setTime();
                         }
                     }
                 });
-
-
+                Pos = position;
+                if(mediaPlayer.isPlaying()){
+                    onTrackPause();
+                }else{
+                    onTrackPlay();
+                }
                 /*
                 Bundle bundle = new Bundle();
                 bundle.putStringArray("songNames",songNames);
@@ -261,10 +292,98 @@ public class DownloadedFragment extends Fragment {
                mediaPlayer.release();
                mediaPlayer = null;
            }
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            notificationManager.cancelAll();
+        }
+        context.unregisterReceiver(broadcastReceiver);
+    }
 
+    public void populateTrack(File file){
+
+        list = new ArrayList<>();
+
+       for(int i = 0; i < readSongs(file).size() ; i++){
+            try {
+                list.add(new Track(songNames[i]));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
 
+      // list.add(new Track("Track1"));
+      // list.add(new Track("Track 2"));
 
+    }
+
+    private void createChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,"SunoKitaab", NotificationManager.IMPORTANCE_LOW);
+            notificationManager = context.getSystemService(NotificationManager.class);
+
+            if(notificationManager != null){
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+                String action = intent.getExtras().getString("actionname");
+
+                switch (action){
+                    case CreateNotification.ACTION_PREVIOUS:
+                        onTrackPrevious();
+                        break;
+                    case CreateNotification.ACTION_PLAY :
+                        if(mediaPlayer.isPlaying()){
+                            onTrackPause();
+                        }
+                        else{
+                            onTrackPlay();
+                        }
+                        break;
+                    case CreateNotification.ACTION_NEXT:
+                        onTrackNext();
+                        break;
+                }
+        }
+    };
+
+    @Override
+    public void onTrackPrevious() {
+
+        Pos --;
+        CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_pause_black_24dp,Pos,list.size() -1);
+        tv_audioname.setText(list.get(Pos).getTitle());
+
+    }
+
+    @Override
+    public void onTrackPlay() {
+
+        CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_pause_black_24dp,Pos,list.size() -1);
+        btnPausePlay.setText("Pause");
+        tv_audioname.setText(list.get(Pos).getTitle());
+        mediaPlayer.start();
+
+    }
+
+    @Override
+    public void onTrackPause() {
+        CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_play_arrow_black_24dp,Pos,list.size() -1);
+        btnPausePlay.setText("Play");
+        tv_audioname.setText(list.get(Pos).getTitle());
+        mediaPlayer.pause();
+    }
+
+    @Override
+    public void onTrackNext() {
+        Pos ++;
+        CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_pause_black_24dp,Pos,list.size() -1);
+        tv_audioname.setText(list.get(Pos).getTitle());
     }
 }
