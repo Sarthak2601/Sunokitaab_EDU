@@ -12,6 +12,8 @@ import android.support.v4.media.session.MediaSessionCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.sunokitaab.Download_Audio.DownloadedFragment;
+import com.example.sunokitaab.MainUi;
 import com.example.sunokitaab.R;
 import com.example.sunokitaab.Services.NotificationActionService;
 
@@ -47,8 +49,15 @@ public class CreateNotification {
                 drw_previous= R.drawable.ic_skip_previous_black_24dp;
             }
 
+          //  Intent intent = new Intent(context, MainUi.class);
+          //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+          //  intent.putExtra("data","notification");
+            //PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent,0);
+
             Intent intentplay = new Intent(context, NotificationActionService.class)
-                    .setAction(ACTION_PLAY);
+                    .setAction(ACTION_PLAY)
+                   // .setFlags(FLA)
+                    ;
             PendingIntent pendingIntentPlay = PendingIntent.getBroadcast(context,0, intentplay, PendingIntent.FLAG_UPDATE_CURRENT);
 
             PendingIntent pendingIntentNext ;
@@ -74,6 +83,7 @@ public class CreateNotification {
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                    // .addAction(drw_previous, "Previous",pendingIntentPrevious)
                     .addAction(playButton, "Play",pendingIntentPlay)
+                    //.setContentIntent(pendingIntent)
                     .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0)
                     .setMediaSession(mediaSessionCompat.getSessionToken()))

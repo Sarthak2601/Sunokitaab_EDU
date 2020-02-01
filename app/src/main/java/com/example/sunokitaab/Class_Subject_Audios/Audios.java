@@ -5,11 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -26,6 +32,10 @@ import android.widget.Toast;
 import com.example.sunokitaab.LoginActivity;
 import com.example.sunokitaab.MainUi;
 import com.example.sunokitaab.R;
+import com.example.sunokitaab.Services.OnClearFromRecentService;
+import com.example.sunokitaab.mediaPlayer_notification.CreateNotification;
+import com.example.sunokitaab.mediaPlayer_notification.Playable;
+import com.example.sunokitaab.mediaPlayer_notification.Track;
 import com.example.sunokitaab.rss.FeedAdapter;
 import com.example.sunokitaab.rss.HTTPDataHandler;
 import com.example.sunokitaab.rss.RSSObject;
@@ -36,10 +46,12 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterListener {
+public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterListener, Playable {
 
     //Toolbar toolbar;
     RecyclerView recyclerView;
@@ -49,6 +61,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
     String url_title;
     File file;
     Button download;
+    List<Track> tracks;
 
 
     private ApiKey_handler apiKeyHandler = new ApiKey_handler();
@@ -76,6 +89,8 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
     private TextView duration;
 
     private Handler myHandler = new Handler();
+    private String songTitle;
+    NotificationManager notificationManager;
 
 
     //API
@@ -170,7 +185,9 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         curSong = url;
         audioname.setText(curTitle);
         audioname.setVisibility(View.VISIBLE);
+        tracks.add(0,new Track(title));
         curTitle = title;
+        songTitle = title;
         ste = 0;
         Toast.makeText(getApplicationContext(),"Buffering",Toast.LENGTH_SHORT).show();
         start();
@@ -199,6 +216,8 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         setContentView(R.layout.activity_class6__english);
 
 //        seekPressed = false;
+
+        tracks = new ArrayList<>();
 
         Log.d("lifecycle", mediaPlayer==null ? "null" : "exists");
         Log.d("lifecycle", play==null? "buttons null": "buttons exist");
@@ -232,6 +251,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         }
 
 
+
         Bundle bundle = getIntent().getExtras();
 
         if(bundle != null) {
@@ -263,6 +283,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
 //                    myHandler.postDelayed(UpdateSongTime, 100);
                     pause.setVisibility(View.VISIBLE);
                     play.setVisibility(View.GONE);
+                    onTrackPlay();
                 }
             }
         });
@@ -275,6 +296,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
                 mediaPlayer.pause();
                 pause.setVisibility(View.GONE);
                 play.setVisibility(View.VISIBLE);
+                onTrackPause();
             }
         });
 
@@ -308,6 +330,13 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
                 }
             }
         });
+        //populateTrack();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            createChannel();
+            registerReceiver(broadcastReceiver,new IntentFilter("TRACKS_TRACKS"));
+            startService(new Intent(this, OnClearFromRecentService.class));
+
+        }
     }
 
     private void start() {
@@ -420,8 +449,25 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
                 myHandler.postDelayed(UpdateSongTime,100);
                 pause.setVisibility(View.VISIBLE);
                 play.setVisibility(View.GONE);
+/*
+                if(mp.isPlaying()){
+                    onTrackPause();
+                }
+                else {
+                    onTrackPlay();
+                }
+
+ */
             }
         });
+
+        if(mediaPlayer.isPlaying()){
+            onTrackPause();
+        }else{
+            onTrackPlay();
+        }
+
+
     }
 
     private void seekchangeTo(int progressChangedValue) {
@@ -516,6 +562,10 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
             mediaPlayer = null;
         }
         Log.d("lifecycle","onDestroy invoked");
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            notificationManager.cancelAll();
+        }
+        unregisterReceiver(broadcastReceiver);
     }
 
 
@@ -525,5 +575,69 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         file = new File(Environment.getExternalStorageDirectory() + "/SunoKitaab/"+ url_title);
     }
 
+    private void createChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(CreateNotification.CHANNEL_ID,"SunoKitaab", NotificationManager.IMPORTANCE_LOW);
+            notificationManager = getSystemService(NotificationManager.class);
+
+            if(notificationManager != null){
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getExtras().getString("actionname");
+
+            switch (action){
+                case CreateNotification.ACTION_PREVIOUS:
+                    onTrackPrevious();
+                    break;
+                case CreateNotification.ACTION_PLAY :
+                    if(mediaPlayer.isPlaying()){
+                        onTrackPause();
+                    }
+                    else{
+                        onTrackPlay();
+                    }
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    onTrackNext();
+                    break;
+            }
+        }
+    };
+
+
+    @Override
+    public void onTrackPrevious() {
+
+    }
+
+    @Override
+    public void onTrackPlay() {
+        CreateNotification.createNotification(this, tracks.get(0), R.drawable.ic_pause_black_24dp,0,tracks.size() -1);
+        pause.setVisibility(View.VISIBLE);
+        play.setVisibility(View.GONE);
+       // btnPausePlay.setText("Pause");
+       // tv_audioname.setText(tracks.get(Pos).getTitle());
+        mediaPlayer.start();
+    }
+
+    @Override
+    public void onTrackPause() {
+        CreateNotification.createNotification(this, tracks.get(0), R.drawable.ic_play_arrow_black_24dp,0,tracks.size() -1);
+        play.setVisibility(View.VISIBLE);
+        pause.setVisibility(View.GONE);
+        //btnPausePlay.setText("Play");
+      //  tv_audioname.setText(list.get(Pos).getTitle());
+        mediaPlayer.pause();
+    }
+
+    @Override
+    public void onTrackNext() {
+
+    }
 }
 
