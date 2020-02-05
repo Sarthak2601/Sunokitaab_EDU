@@ -234,9 +234,11 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
             public void OnNoteClick(int position) {
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsPri.get(position).equals("English")) {
-                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c85da9c34ff860e396aa95651c236740"); // CLASS 1 ENG
+                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c85da9c34ff860e396aa95651c236740");// CLASS 1 ENG
+                    intent1.putExtra("class","Class 1 - English");
                 } else if (subjectsPri.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/e98ce18b8c2f9cb626bfa267a837a028"); // CLASS 1 HIN
+                    intent1.putExtra("class","Class 1 - Hindi");
                 }
                 startActivity(intent1);
             }
@@ -248,8 +250,10 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsPri.get(position).equals("English")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/082ccfea0da183211920aaa68f51db2f"); // CLASS 2 ENG
+                    intent1.putExtra("class","Class 2 - English");
                 } else if (subjectsPri.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/e1e0bc541a419f3656245785988f67a8"); // CLASS 2 HIN
+                    intent1.putExtra("class","Class 2 - Hindi");
                 }
                 startActivity(intent1);
             }
@@ -261,11 +265,13 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsMid.get(position).equals("English")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/df1e619eb5ef929b9fc940dd2b62e629"); // CLASS 3 ENG
-
+                    intent1.putExtra("class","Class 3 - English");
                 } else if (subjectsMid.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/236e6f04f2eb41872d18ad9d8d70f0fb"); // CLASS 3 HIN
+                    intent1.putExtra("class","Class 3 - Hindi");
                 } else if (subjectsMid.get(position).equals("E.V.S")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c0e434a5813658ca9de0e079600dd745"); // CLASS 3 EVS
+                    intent1.putExtra("class","Class 3 - E.V.S");
                 }
                 startActivity(intent1);
             }
@@ -277,10 +283,15 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsMid.get(position).equals("English")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/184fb533ba85fe20808b100733e30467"); // CLASS 4 ENG
+                    intent1.putExtra("class","Class 4 - English");
                 } else if (subjectsMid.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/03ebcfa459d5b5a87bece78f415ef101"); // CLASS 4 HIN
+                    intent1.putExtra("class","Class 4 - Hindi");
+
                 } else if (subjectsMid.get(position).equals("E.V.S")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/928647963fb8522d182c85eeb6908070"); // CLASS 4 EVS
+                    intent1.putExtra("class","Class 4 - E.V.S");
+
                 }
                 startActivity(intent1);
             }
@@ -292,10 +303,16 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsMid.get(position).equals("English")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/46a16dd98c379d401392246a86c56b50"); // CLASS 5 ENG
+                    intent1.putExtra("class","Class 5 - English");
+
                 } else if (subjectsMid.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/cb5d0acc65f5e9e2356ce7c7841e0689"); // CLASS 5 HIN
+                    intent1.putExtra("class","Class 5 - Hindi");
+
                 } else if (subjectsMid.get(position).equals("E.V.S")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/4a11403e1d4ffb6bed0036ce295f251f"); // CLASS 5 EVS
+                    intent1.putExtra("class","Class 5 - E.V.S");
+
                 }
                 startActivity(intent1);
 
@@ -308,14 +325,21 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsHigh.get(position).equals("English")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/357c6961dc6f1497fe3136a5cfb6e819"); // CLASS 6 ENG
+                    intent1.putExtra("class","Class 6 - English");
+
                 } else if (subjectsHigh.get(position).equals("Science")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/66c363efa76647b51064b6c6bd257bb0"); // CLASS 6 SCI
+                    intent1.putExtra("class","Class 6 - Science");
 
                 } else if (subjectsHigh.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/b5253476ab0501d2647b013956a37ddb"); // CLASS 6 HIN
+                    intent1.putExtra("class","Class 6 - Hindi");
+
 
                 } else if (subjectsHigh.get(position).equals("Social Science")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/db22a8cf5cbbca5bb3360c277c605ebb"); // CLASS 6 SST
+                    intent1.putExtra("class","Class 6 - Social Science");
+
 
                 }
                 startActivity(intent1);
@@ -329,12 +353,20 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (subjectsHigh.get(position).equals("English")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/9a75024013121ed2f455043e2c6002b6"); // CLASS 7 ENG
+                    intent1.putExtra("class","Class 7 - English");
+
                 } else if (subjectsHigh.get(position).equals("Science")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/471092630637950e2df99d2a0c7afbfa"); // CLASS 7 SCI
+                    intent1.putExtra("class","Class 7 - Science");
+
                 } else if (subjectsHigh.get(position).equals("Hindi")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c51850788eb41fe3ccacd3934ae1d411"); // CLASS 7 HIN
+                    intent1.putExtra("class","Class 7 - Hindi");
+
                 } else if (subjectsHigh.get(position).equals("Social Science")) {
                     intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/f975e80e229a89ee7b3d7f37ce95b58f"); // CLASS 7 SST
+                    intent1.putExtra("class","Class 7 - Social Science");
+
                 }
                 startActivity(intent1);
 
@@ -347,15 +379,20 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if(subjectsHigh.get(position).equals( "English")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/0a870144e3285568b964af496aa9149d"); // CLASS 8 ENG
+                    intent1.putExtra("class","Class 8 - English");
                 }
                 else if(subjectsHigh.get(position).equals("Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/9f162f9d43e69ce26f84dffebbb973d1"); // CLASS 8 SCI
+                    intent1.putExtra("class","Class 8 - Science");
                 }
                 else if(subjectsHigh.get(position).equals("Hindi")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/952482e4f5a6d491f29a3a6c258851fe"); // CLASS 8 HIN
+                    intent1.putExtra("class","Class 8 - Hindi");
+
                 }
                 else if(subjectsHigh.get(position).equals("Social Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/88d979304d8f8f3ffb9277f2c4d0d352"); // CLASS 8 SST
+                    intent1.putExtra("class","Class 8 - Social Science");
                 }
                 startActivity(intent1);
 
@@ -368,16 +405,19 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if(subjectsHigh.get(position).equals( "English")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/17e402370158cc3f370e5618e56a3727"); // CLASS 9 ENG
-
+                    intent1.putExtra("class","Class 9 - English");
                 }
                 else if(subjectsHigh.get(position).equals("Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/0fa5d6a86dce8ec9a21305a6e9d7ecc6"); // CLASS 9 SCI
+                    intent1.putExtra("class","Class 9 - Science");
                 }
                 else if(subjectsHigh.get(position).equals("Hindi")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/a1500cc8abb17eeb785e009c95ac2e9c"); // CLASS 9 HIN
+                    intent1.putExtra("class","Class 9 - Hindi");
                 }
                 else if(subjectsHigh.get(position).equals("Social Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/f57f79cd3c1591312d65121b8b1dc9f1"); // CLASS 9 SST
+                    intent1.putExtra("class","Class 9 - Social Science");
                 }
                 startActivity(intent1);
 
@@ -390,15 +430,19 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if(subjectsHigh.get(position).equals( "English")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/cee0b224516b70db8d33fafd906098ed"); // CLASS 10 ENG
+                    intent1.putExtra("class","Class 10 - English");
                 }
                 else if(subjectsHigh.get(position).equals("Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/c6cb48db0b24472949d3647ac255bd89"); // CLASS 10 SCI
+                    intent1.putExtra("class","Class 10 - Science");
                 }
                 else if(subjectsHigh.get(position).equals("Hindi")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/45f27509f75065a401b149a488aac751"); // CLASS 10 HIN
+                    intent1.putExtra("class","Class 10 - Hindi");
                 }
                 else if(subjectsHigh.get(position).equals("Social Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/95126300095e18ea421acc593a0fd564"); // CLASS 10 SST
+                    intent1.putExtra("class","Class 10 - Social Science");
                 }
                 startActivity(intent1);
 
@@ -411,21 +455,27 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if(subjectsHighHigh.get(position).equals( "English")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/50e113399776b65636dcba0a97efa77e"); // CLASS 11 ENG
+                    intent1.putExtra("class","Class 11 - English");
                 }
                 else if(subjectsHighHigh.get(position).equals("Political Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/1608484741a4709a689112187856ebd1"); // CLASS 11 POL
+                    intent1.putExtra("class","Class 11 - Political Science");
                 }
                 else if(subjectsHighHigh.get(position).equals("Hindi")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/73c3923626434d52e59dfcd77fa0a658"); // CLASS 11 HIN
+                    intent1.putExtra("class","Class 11 - Hindi");
                 }
                 else if(subjectsHighHigh.get(position).equals("Economics")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/56ec60b777ea8dd7a81efd6241c9a8f1"); // CLASS 11 ECO
+                    intent1.putExtra("class","Class 11 - Economics");
                 }
                 else if(subjectsHighHigh.get(position).equals("History")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/b28a15ce619e3fc344e80d2dbd316dfd"); // CLASS 11 HIS
+                    intent1.putExtra("class","Class 11 - History");
                 }
                 else if(subjectsHighHigh.get(position).equals("Geography")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/106e6567aa8bd3cecf4080670b11bd10"); // CLASS 11 GEO
+                    intent1.putExtra("class","Class 11 - Geography");
                 }
                 startActivity(intent1);
 
@@ -438,21 +488,27 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if(subjectsHighHigh.get(position).equals( "English")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/39b9ad5c1812c50323ea1e414f533c17"); // CLASS 12 ENG
+                    intent1.putExtra("class","Class 12 - English");
                 }
                 else if(subjectsHighHigh.get(position).equals("Political Science")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/826688b8e7f1a3173c108b16f4627a2c"); // CLASS 12 POL
+                    intent1.putExtra("class","Class 12 - Political Science");
                 }
                 else if(subjectsHighHigh.get(position).equals("Hindi")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/ed57d5a221ce51d75c9f3e9c3b2a89cc"); // CLASS 12 HIN
+                    intent1.putExtra("class","Class 12 - Hindi");
                 }
                 else if(subjectsHighHigh.get(position).equals("Economics")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/989bd06090abcd5e84fc9234b1061c03"); // CLASS 12 ECO
+                    intent1.putExtra("class","Class 12 - Economics");
                 }
                 else if(subjectsHighHigh.get(position).equals("History")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/db22a8cf5cbbca5bb3360c277c605ebb"); // CLASS 12 HIS
+                    intent1.putExtra("class","Class 12 - History");
                 }
                 else if(subjectsHighHigh.get(position).equals("Geography")){
                     intent1.putExtra("rss","https://www.podcasts.com/rss_feed/e85c970df2560a794799401fcb736b71"); // CLASS 12 GEO
+                    intent1.putExtra("class","Class 12 - Geography");
                 }
                 startActivity(intent1);
 

@@ -1,7 +1,11 @@
 package com.example.sunokitaab;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,11 +21,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.sunokitaab.Download_Audio.DownloadedFragment;
+import com.example.sunokitaab.login_signup.signIn;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 
@@ -53,7 +59,6 @@ public class MainUi extends AppCompatActivity {
         }
 
         onNewIntent(getIntent());
-
 
         navigation = findViewById(R.id.nav_view);
         frameLayout = findViewById(R.id.nav_host_fragment);
@@ -167,20 +172,10 @@ public class MainUi extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.logOut:
-                AuthUI.getInstance().signOut(MainUi.this)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(MainUi.this, LoginActivity.class));
-                                finish();
-                                Toast.makeText(MainUi.this, "Logged Out", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainUi.this, "Error : " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+               FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainUi.this, signIn.class));
+                finish();
+                Toast.makeText(MainUi.this, "Logged Out", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:

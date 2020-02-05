@@ -29,10 +29,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.sunokitaab.LoginActivity;
-import com.example.sunokitaab.MainUi;
 import com.example.sunokitaab.R;
 import com.example.sunokitaab.Services.OnClearFromRecentService;
+import com.example.sunokitaab.login_signup.signIn;
 import com.example.sunokitaab.mediaPlayer_notification.CreateNotification;
 import com.example.sunokitaab.mediaPlayer_notification.Playable;
 import com.example.sunokitaab.mediaPlayer_notification.Track;
@@ -74,7 +73,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
     private ImageButton btn_frev , btn_ffwd;
     private TextView audioname;
     private boolean seekPressed;
-
+    private TextView text;
     private String curSong = "";
     private String curTitle = "";
     private String textSetter = "";
@@ -226,6 +225,9 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         seekbar = (SeekBar)findViewById(R.id.seekBarmain);
         seekbar.setClickable(false);
         download = findViewById(R.id.downloadContent);
+        text = findViewById(R.id.text);
+
+
 
         ste = 0;
         play = (Button) findViewById(R.id.btn_play);
@@ -256,6 +258,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
 
         if(bundle != null) {
             RSS_link = bundle.getString("rss");
+            text.setText(bundle.getString("class"));
         }
         else{
             Toast.makeText(this, "RSS NOT RECEIVED", Toast.LENGTH_SHORT).show();
@@ -525,7 +528,7 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                startActivity(new Intent(Audios.this, LoginActivity.class));
+                                startActivity(new Intent(Audios.this, signIn.class));
                                 finish();
                                 Toast.makeText(Audios.this, "Logged Out", Toast.LENGTH_SHORT).show();
                             }
