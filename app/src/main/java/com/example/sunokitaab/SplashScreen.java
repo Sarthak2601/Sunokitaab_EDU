@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 
+import com.example.sunokitaab.login_signup.signIn;
+
 public class SplashScreen extends AppCompatActivity {
 
     /** Duration of wait **/
@@ -24,7 +26,7 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashScreen.this, LoginActivity.class);
+                Intent mainIntent = new Intent(SplashScreen.this,signIn.class);
                 SplashScreen.this.startActivity(mainIntent);
                 SplashScreen.this.finish();
             }
