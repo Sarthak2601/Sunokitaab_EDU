@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNoteListener {
 
+    RecyclerView recyclerViewStories;
     RecyclerView recyclerView1;
     RecyclerView recyclerView2;
     RecyclerView recyclerView3;
@@ -30,6 +31,7 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
     RecyclerView recyclerView11;
     RecyclerView recyclerView12;
 
+    LinearLayout linearLayoutStories;
     LinearLayout linearLayout1;
     LinearLayout linearLayout2;
     LinearLayout linearLayout3;
@@ -43,13 +45,16 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
     LinearLayout linearLayout11;
     LinearLayout linearLayout12;
 
-
+    ArrayList<String> chaptersStories = new ArrayList<String>();
     ArrayList<String> subjectsPri = new ArrayList<String>();
     ArrayList<String> subjectsMid = new ArrayList<String>();
     ArrayList<String> subjectsHigh = new ArrayList<String>();
     ArrayList<String> subjectsHighHigh = new ArrayList<String>();
 
     private static final String TAG = "SearchFragment";
+
+
+    ClassSubAdapter12.OnNoteListener onNoteListenerStories;
     ClassSubAdapter12.OnNoteListener onNoteListener1;
     ClassSubAdapter12.OnNoteListener onNoteListener2;
     ClassSubAdapter12.OnNoteListener onNoteListener3;
@@ -69,6 +74,8 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search, null);
+
+        ClassSubAdapter12 stories = new ClassSubAdapter12(getActivity(),chaptersStories,onNoteListenerStories);
 
         ClassSubAdapter12 class1 = new ClassSubAdapter12(getActivity(),subjectsPri,onNoteListener1);
         ClassSubAdapter12 class2 = new ClassSubAdapter12(getActivity(),subjectsPri,onNoteListener2);
@@ -93,6 +100,7 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
        // ClassSubAdapter12 classSubAdapterMid = new ClassSubAdapter12(getActivity(),subjectsMid,this);
 
 
+        recyclerViewStories = rootView.findViewById(R.id.recyclerStories);
         recyclerView1 = rootView.findViewById(R.id.recycler1);
         recyclerView2 = rootView.findViewById(R.id.recycler2);
         recyclerView3 = rootView.findViewById(R.id.recycler3);
@@ -107,7 +115,7 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         recyclerView12 = rootView.findViewById(R.id.recycler12);
 
 
-        linearLayout1 = rootView.findViewById(R.id.ll1);
+        linearLayoutStories = rootView.findViewById(R.id.llstories);
         linearLayout2= rootView.findViewById(R.id.ll2);
         linearLayout3= rootView.findViewById(R.id.ll3);
         linearLayout4= rootView.findViewById(R.id.ll4);
@@ -122,7 +130,8 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
 
 
 
-
+        LinearLayoutManager linearLayoutManagerStories = new LinearLayoutManager(getActivity());
+        linearLayoutManagerStories.setOrientation(RecyclerView.HORIZONTAL);
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getActivity());
         linearLayoutManager1.setOrientation(RecyclerView.HORIZONTAL);
@@ -160,7 +169,8 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         LinearLayoutManager linearLayoutManager12 = new LinearLayoutManager(getActivity());
         linearLayoutManager12.setOrientation(RecyclerView.HORIZONTAL);
 
-
+        recyclerViewStories.setLayoutManager(linearLayoutManagerStories);
+        recyclerViewStories.setAdapter(stories);
 
         recyclerView1.setLayoutManager(linearLayoutManager1);
         recyclerView1.setAdapter(class1);
@@ -214,6 +224,9 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         subjectsHigh.add("Hindi");
         subjectsHigh.add("Social Science");
 
+        chaptersStories.add("Story1");
+        chaptersStories.add("Story2");
+
         subjectsMid.add("English");
         subjectsMid.add("Hindi");
         subjectsMid.add("E.V.S");
@@ -228,6 +241,20 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         subjectsHighHigh.add("History");
         subjectsHighHigh.add("Geography");
 
+        onNoteListenerStories = new ClassSubAdapter12.OnNoteListener() {
+            @Override
+            public void OnNoteClick(int position) {
+                Intent intent1 = new Intent(getActivity(), Audios.class);
+                if (chaptersStories.get(position).equals("Story1")) {
+                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c85da9c34ff860e396aa95651c236740");// CLASS 1 ENG
+                    intent1.putExtra("class","Class 1 - English");
+                } else if (chaptersStories.get(position).equals("Story2")) {
+                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/e98ce18b8c2f9cb626bfa267a837a028"); // CLASS 1 HIN
+                    intent1.putExtra("class","Class 1 - Hindi");
+                }
+                startActivity(intent1);
+            }
+        };
 
         onNoteListener1 = new ClassSubAdapter12.OnNoteListener() {
             @Override
