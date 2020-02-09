@@ -43,11 +43,12 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
     LinearLayout linearLayout11;
     LinearLayout linearLayout12;
 
-
     ArrayList<String> subjectsPri = new ArrayList<String>();
     ArrayList<String> subjectsMid = new ArrayList<String>();
     ArrayList<String> subjectsHigh = new ArrayList<String>();
     ArrayList<String> subjectsHighHigh = new ArrayList<String>();
+    ArrayList<String> BasicLearning = new ArrayList<>();
+    ArrayList<String> Stories = new ArrayList<>();
 
     private static final String TAG = "SearchFragment";
     ClassSubAdapter12.OnNoteListener onNoteListener1;
@@ -62,7 +63,6 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
     ClassSubAdapter12.OnNoteListener onNoteListener10;
     ClassSubAdapter12.OnNoteListener onNoteListener11;
     ClassSubAdapter12.OnNoteListener onNoteListener12;
-
 
 
     @Nullable
@@ -84,7 +84,6 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         ClassSubAdapter12 class10 = new ClassSubAdapter12(getActivity(),subjectsHigh,onNoteListener10);
         ClassSubAdapter12 class11 = new ClassSubAdapter12(getActivity(),subjectsHighHigh,onNoteListener11);
         ClassSubAdapter12 class12 = new ClassSubAdapter12(getActivity(),subjectsHighHigh,onNoteListener12);
-
 
 
        // ClassSubAdapter12 classSubAdapterhigh = new ClassSubAdapter12(getActivity(),subjectsHigh,this);
@@ -119,9 +118,6 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         linearLayout10= rootView.findViewById(R.id.ll10);
         linearLayout11 = rootView.findViewById(R.id.ll11);
         linearLayout12 = rootView.findViewById(R.id.ll12);
-
-
-
 
 
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(getActivity());
@@ -161,7 +157,6 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         linearLayoutManager12.setOrientation(RecyclerView.HORIZONTAL);
 
 
-
         recyclerView1.setLayoutManager(linearLayoutManager1);
         recyclerView1.setAdapter(class1);
 
@@ -199,7 +194,6 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         recyclerView12.setAdapter(class12);
 
 
-
         return rootView;
 
     }
@@ -227,7 +221,6 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         subjectsHighHigh.add("Economics");
         subjectsHighHigh.add("History");
         subjectsHighHigh.add("Geography");
-
 
         onNoteListener1 = new ClassSubAdapter12.OnNoteListener() {
             @Override
@@ -511,9 +504,9 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
                     intent1.putExtra("class","Class 12 - Geography");
                 }
                 startActivity(intent1);
-
             }
         };
+
 
     }
 
@@ -524,19 +517,13 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         subjectsMid.clear();
         subjectsHigh.clear();
         subjectsHighHigh.clear();
+        BasicLearning.clear();
 
         super.onDestroy();
     }
 
     @Override
-    public void OnNoteClick(int position){
-
-    }
-
-
-
-
-
+    public void OnNoteClick(int position){ }
 
 
 }

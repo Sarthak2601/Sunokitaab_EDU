@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -32,6 +35,23 @@ import com.example.sunokitaab.Services.OnClearFromRecentService;
 import com.example.sunokitaab.mediaPlayer_notification.CreateNotification;
 import com.example.sunokitaab.mediaPlayer_notification.Playable;
 import com.example.sunokitaab.mediaPlayer_notification.Track;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.RenderersFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ads.AdsMediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -47,13 +67,14 @@ public class DownloadedFragment extends Fragment implements Playable {
     Button btnPausePlay;
     ImageButton btnfwd, btnbwd;
     SeekBar seekBar;
-    static MediaPlayer mediaPlayer;
+    //static MediaPlayer mediaPlayer;
     Handler handler;
     Runnable runnable;
     TextView time,duration;
     private String audioTitle;
     NotificationManager notificationManager;
-
+    SimpleExoPlayer simpleExoPlayer;
+    Boolean isPlaying;
     List<Track> list;
     int Pos = 0;
 
@@ -61,16 +82,15 @@ public class DownloadedFragment extends Fragment implements Playable {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_downloaded, null);
-
+        isPlaying = false;
         audioTitle = "songName";
 
-        if(mediaPlayer!=null){
-            mediaPlayer.stop();
-            mediaPlayer.reset();
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if(simpleExoPlayer!=null){
+            //simpleExoPlayer.stop();
+            simpleExoPlayer.stop(true);
+            simpleExoPlayer.release();
+            simpleExoPlayer = null;
         }
-
         tv_audioname = rootview.findViewById(R.id.tv_audioname);
         btnPausePlay = rootview.findViewById(R.id.btn_pauseee);
         btnfwd = rootview.findViewById(R.id.btn_ffwddd);
@@ -101,117 +121,115 @@ public class DownloadedFragment extends Fragment implements Playable {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,R.layout.songs_layout,R.id.textView,songNames );
         listView.setAdapter(adapter);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser){
-                    mediaPlayer.seekTo(progress);
-                    setTime();
 
-                }
-            }
+        try {
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(mediaPlayer!=null){
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                }
-
-                Uri uri = Uri.parse(songs.get(position).toString());
-
-                //String songNames[] = bundle.getStringArray("songNames");
-                mediaPlayer = MediaPlayer.create(getActivity(), uri);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
+                    if (simpleExoPlayer != null) {
+                        simpleExoPlayer.stop();
+                        simpleExoPlayer.release();
+                    }
 
-                audioTitle =    songs.get(position).getName().replace(".mp3", "");
-                tv_audioname.setText(audioTitle);
-                tv_audioname.setVisibility(View.VISIBLE);
+                    Uri uri = Uri.parse(songs.get(position).toString());
 
-                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        seekBar.setMax(mp.getDuration());
-                        mp.start();
-                        changeSeekBar();
-                        setTime();
+
+                    audioTitle = songs.get(position).getName().replace(".mp3", "");
+                    tv_audioname.setText(audioTitle);
+                    tv_audioname.setVisibility(View.VISIBLE);
+                    Toast toast = Toast.makeText(context, "Press play to continue.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                    setupPlayer(uri);
+                    isPlaying = true;
+                    changeSeekBar();
+
+                    //setTime();
+                    //onTrackPlay();
+                    //String songNames[] = bundle.getStringArray("songNames");
+                    //mediaPlayer = MediaPlayer.create(getActivity(), uri);
+
+
+                    btnfwd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            simpleExoPlayer.seekTo(simpleExoPlayer.getCurrentPosition() + 5000);
+                            setTime();
+                        }
+                    });
+                    btnbwd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            simpleExoPlayer.seekTo(simpleExoPlayer.getCurrentPosition() - 5000);
+                            setTime();
+                        }
+                    });
+                    btnPausePlay.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            seekBar.setMax(Integer.parseInt(String.valueOf(simpleExoPlayer.getDuration())));
+                            seekBar.setVisibility(View.VISIBLE);
+
+                            if (isPlaying) {
+                                simpleExoPlayer.setPlayWhenReady(false);
+                                isPlaying = false;
+                                onTrackPause();
+                                btnPausePlay.setText("Play");
+                                setTime();
+                            } else {
+                                simpleExoPlayer.setPlayWhenReady(true);
+                                isPlaying = true;
+                                btnPausePlay.setText("Pause");
+                                changeSeekBar();
+                                onTrackPlay();
+                                setTime();
+                            }
+                        }
+                    });
+                    Pos = position;
+                    if (isPlaying) {
+                        onTrackPause();
+                    } else {
                         onTrackPlay();
-
                     }
-                });
+                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            if(fromUser){
+                                simpleExoPlayer.seekTo(progress);
+                                setTime();
 
-
-
-                btnfwd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() + 5000);
-                        setTime();
-                    }
-                });
-                btnbwd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 5000);
-                        setTime();
-                    }
-                });
-                btnPausePlay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(mediaPlayer.isPlaying()){
-                            mediaPlayer.pause();
-                            onTrackPause();
-                            btnPausePlay.setText("Play");
-                            setTime();
+                            }
                         }
-                        else {
-                            mediaPlayer.start();
-                            btnPausePlay.setText("Pause");
-                            changeSeekBar();
-                            onTrackPlay();
-                            setTime();
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
                         }
-                    }
-                });
-                Pos = position;
-                if(mediaPlayer.isPlaying()){
-                    onTrackPause();
-                }else{
-                    onTrackPlay();
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+
+                        }
+                    });
+
                 }
-                /*
-                Bundle bundle = new Bundle();
-                bundle.putStringArray("songNames",songNames);
-                startActivity(
-                        new Intent(getActivity(), downloadAudioPlayer.class)
-                            .putExtra("position", position)
-                            .putExtra("list",songs));
-
-                 */
 
 
 
-            }
-        });
+            });
 
+
+
+        }catch (Exception e){
+            Toast.makeText(context, ""+ e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            Log.d("boom", "onCreateView: " + e.getMessage());
+        }
         return rootview;
-
-
     }
 
     @Override
@@ -240,11 +258,11 @@ public class DownloadedFragment extends Fragment implements Playable {
 
     private void setTime() {
 
-        if(mediaPlayer!=null) {
+        if(simpleExoPlayer!=null) {
 
 
-            long songCurrentTime = mediaPlayer.getCurrentPosition();
-            long songTotalTime = mediaPlayer.getDuration();
+            long songCurrentTime = simpleExoPlayer.getCurrentPosition();
+            long songTotalTime = simpleExoPlayer.getDuration();
 
             long secondT = (songCurrentTime / 1000) % 60;
             long minuteT = (songCurrentTime / (1000 * 60)) % 60;
@@ -265,8 +283,8 @@ public class DownloadedFragment extends Fragment implements Playable {
     private void changeSeekBar() {
 
 
-        if(mediaPlayer!=null){
-            seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        if(simpleExoPlayer!=null){
+            seekBar.setProgress(Integer.parseInt(String.valueOf(simpleExoPlayer.getCurrentPosition())));
             runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -284,15 +302,16 @@ public class DownloadedFragment extends Fragment implements Playable {
 
         //changeSeekBar();
 
-        if(mediaPlayer!=null){
+        if(simpleExoPlayer!=null){
 
-           if(mediaPlayer.isPlaying()) {
-               mediaPlayer.stop();
-               mediaPlayer.reset();
-               mediaPlayer.release();
-               mediaPlayer = null;
-           }
+
+              // simpleExoPlayer.stop();
+               simpleExoPlayer.stop(true);
+               simpleExoPlayer.release();
+               simpleExoPlayer = null;
+
         }
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             notificationManager.cancelAll();
         }
@@ -311,7 +330,6 @@ public class DownloadedFragment extends Fragment implements Playable {
                 e.printStackTrace();
             }
         }
-
 
       // list.add(new Track("Track1"));
       // list.add(new Track("Track 2"));
@@ -339,7 +357,7 @@ public class DownloadedFragment extends Fragment implements Playable {
                         onTrackPrevious();
                         break;
                     case CreateNotification.ACTION_PLAY :
-                        if(mediaPlayer.isPlaying()){
+                        if(isPlaying){
                             onTrackPause();
                         }
                         else{
@@ -368,7 +386,10 @@ public class DownloadedFragment extends Fragment implements Playable {
         CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_pause_black_24dp,Pos,list.size() -1);
         btnPausePlay.setText("Pause");
         tv_audioname.setText(list.get(Pos).getTitle());
-        mediaPlayer.start();
+        simpleExoPlayer.setPlayWhenReady(true);
+        isPlaying = true;
+        seekBar.setMax(Integer.parseInt(String.valueOf(simpleExoPlayer.getDuration())));
+        seekBar.setVisibility(View.VISIBLE);
 
     }
 
@@ -377,7 +398,8 @@ public class DownloadedFragment extends Fragment implements Playable {
         CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_play_arrow_black_24dp,Pos,list.size() -1);
         btnPausePlay.setText("Play");
         tv_audioname.setText(list.get(Pos).getTitle());
-        mediaPlayer.pause();
+        simpleExoPlayer.setPlayWhenReady(false);
+        isPlaying = false;
     }
 
     @Override
@@ -385,5 +407,25 @@ public class DownloadedFragment extends Fragment implements Playable {
         Pos ++;
         CreateNotification.createNotification(context, list.get(Pos), R.drawable.ic_pause_black_24dp,Pos,list.size() -1);
         tv_audioname.setText(list.get(Pos).getTitle());
+    }
+
+
+
+    private void setupPlayer(Uri uri){
+
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(context,null,DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF);
+        TrackSelector trackSelector = new DefaultTrackSelector();
+        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory,trackSelector); //Global
+
+        String userAgent = Util.getUserAgent(context,"Sunokitaab");
+        ExtractorMediaSource mediaSource =new ExtractorMediaSource(uri,
+                new DefaultDataSourceFactory(context,userAgent),
+                new DefaultExtractorsFactory(),
+                null,
+                null);
+
+        simpleExoPlayer.prepare(mediaSource);//Local
+        simpleExoPlayer.setPlayWhenReady(false);//Local
+
     }
 }

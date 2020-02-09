@@ -12,6 +12,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,7 @@ class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
     TextView size;
     Button download;
     String url ="";
+
     public static final String CHANNEL_ID = "channel1";
 //    MediaController mediaController;
 
@@ -146,6 +149,20 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
             @Override
             public void run() {
 
+                   final int Bytes_Downloaded= 0;
+                   final int Total_Bytes = 0;
+                   final int progress = 0 ;
+                   final int ProgressMax = 100;
+
+                     Bitmap icon = BitmapFactory.decodeResource(context.getResources(),R.drawable.logo);
+                     //final NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+
+                   final   NotificationCompat.Builder builder = new NotificationCompat.Builder(context,CHANNEL_ID);
+                        builder.setSmallIcon(R.drawable.ic_audiotrack)
+                        .setLargeIcon(icon)
+                        .setContentTitle("SunoKitaab Media Downloader")
+                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                        .setProgress(ProgressMax,0,false);
 
                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                     request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
@@ -155,7 +172,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
 
                     request.allowScanningByMediaScanner();
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
+                    //notificationManagerCompat.notify(1,builder.build());
                     request.setMimeType("audio/mpeg");
                     File folder = new File(Environment.getExternalStorageDirectory() + "/SunoKitaab");
                     if (!folder.exists()) {
@@ -163,9 +180,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
                     }
                     String finalTitle = title.trim() + ".mp3";
                     request.setDestinationInExternalPublicDir("/SunoKitaab", finalTitle);
-                    DownloadManager manager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
+                    final DownloadManager manager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
                     manager.enqueue(request);
-
 
                 }
 
@@ -241,13 +257,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
                     .setLargeIcon(icon)
                     .setContentTitle("SunoKitaab Media Downloader")
                     .setPriority(NotificationCompat.PRIORITY_LOW)
-                //    .setProgress(100,progress,false)
+                    //.setProgress(100,progress,false)
                     // .addAction(drw_previous, "Previous",pendingIntentPrevious)
-                   // .addAction(playButton, "Play", pendingIntentPlay)
+                    // .addAction(playButton, "Play", pendingIntentPlay)
                     .setContentIntent(pendingIntent)
                     //   .addAction(drw_next, "Next",pendingIntentNext)
                     .build();
-
 
             notificationManagerCompat.notify(1, notification);
         }
