@@ -24,5 +24,12 @@
     <string name="title_search"></string>
     <string name="title_downloaded"></string>
 
+    <string-array name="being">
 
+        <item>Select Identity</item>
+        <item>Student</item>
+        <item>Parent</item>
+        <item>Teacher</item>
+
+    </string-array>
 </resources>
