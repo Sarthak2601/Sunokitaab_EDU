@@ -296,7 +296,12 @@ public class DownloadedFragment extends Fragment implements Playable {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             notificationManager.cancelAll();
         }
-        context.unregisterReceiver(broadcastReceiver);
+        try {
+            context.unregisterReceiver(broadcastReceiver);
+        }catch(IllegalArgumentException e) {
+
+            e.printStackTrace();
+        }
     }
 
     public void populateTrack(File file){

@@ -224,8 +224,8 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         subjectsHigh.add("Hindi");
         subjectsHigh.add("Social Science");
 
-        chaptersStories.add("Story1");
-        chaptersStories.add("Story2");
+        chaptersStories.add("Stories");
+        chaptersStories.add("Basic");
 
         subjectsMid.add("English");
         subjectsMid.add("Hindi");
@@ -245,12 +245,12 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
             @Override
             public void OnNoteClick(int position) {
                 Intent intent1 = new Intent(getActivity(), Audios.class);
-                if (chaptersStories.get(position).equals("Story1")) {
-                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c85da9c34ff860e396aa95651c236740");// CLASS 1 ENG
-                    intent1.putExtra("class","Class 1 - English");
-                } else if (chaptersStories.get(position).equals("Story2")) {
-                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/e98ce18b8c2f9cb626bfa267a837a028"); // CLASS 1 HIN
-                    intent1.putExtra("class","Class 1 - Hindi");
+                if (chaptersStories.get(position).equals("Stories")) {
+                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c0f068ce4127912d62258c05dd74337c");// CLASS 1 ENG
+                    intent1.putExtra("class","Stories");
+                } else if (chaptersStories.get(position).equals("Basic")) {
+                    intent1.putExtra("rss", "http://www.podcasts.com/rss_feed/2338f64e952789e73dac8bccc2b7845f"); // CLASS 1 HIN
+                    intent1.putExtra("class","Basic Learning");
                 }
                 startActivity(intent1);
             }

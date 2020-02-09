@@ -98,8 +98,8 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
     //feedtojson
 //    private final String RSS_to_Json_API = "https://feed2json.org/convert?url=https%3A%2F%2Fwww.podcasts.com%2Frss_feed%2F";
 
-    private final String API_KEY = "rxgdkvedigso5ufz2orgvm99jhmuimybnnfiizf8";
-    private final String FEED_ITEMS_COUNT = "90";
+//    private final String API_KEY;
+    private final String FEED_ITEMS_COUNT = "1000";
     //RSS link
     private static String RSS_link="";
     String RSS = "";
@@ -217,10 +217,6 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
 //        seekPressed = false;
 
         tracks = new ArrayList<>();
-
-        Log.d("lifecycle", mediaPlayer==null ? "null" : "exists");
-        Log.d("lifecycle", play==null? "buttons null": "buttons exist");
-        Log.d("lifecycle", curTitle.equals("")? "url dead": "url alive");
 
         seekbar = (SeekBar)findViewById(R.id.seekBarmain);
         seekbar.setClickable(false);
@@ -568,7 +564,12 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             notificationManager.cancelAll();
         }
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        }catch(IllegalArgumentException e) {
+
+            e.printStackTrace();
+        }
     }
 
 
