@@ -401,7 +401,6 @@
 
         android:tag="ll12"
         android:id="@+id/ll12"
-        android:layout_marginBottom="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -431,6 +430,80 @@
             app:layout_constraintVertical_bias="0.424"
             tools:layout_editor_absoluteX="21dp"
             android:layout_below="@+id/textclass12"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:tag="llstories"
+        android:id="@+id/ll13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll1">
+        <TextView
+            android:id="@+id/textclass13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/tenDP"
+            android:paddingLeft="@dimen/twentyDP"
+            android:fontFamily="sans-serif-black"
+            android:text="Stories"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/ThirtyFiveSP"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="218dp" />
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/recycler13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.424"
+            tools:layout_editor_absoluteX="21dp"
+            android:layout_below="@+id/textclass13"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:tag="llstories"
+        android:id="@+id/ll14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll1">
+        <TextView
+            android:id="@+id/textclass14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/tenDP"
+            android:paddingLeft="@dimen/twentyDP"
+            android:fontFamily="sans-serif-black"
+            android:text="Basic Learning"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/ThirtyFiveSP"
+            tools:layout_editor_absoluteX="2dp"
+            tools:layout_editor_absoluteY="218dp" />
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/recycler14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.424"
+            tools:layout_editor_absoluteX="21dp"
+            android:layout_below="@+id/textclass14"/>
 
 
     </LinearLayout>
