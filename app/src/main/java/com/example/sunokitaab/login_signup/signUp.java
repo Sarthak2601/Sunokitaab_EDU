@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,8 @@ public class signUp extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore db;
+    Spinner being;
+    String identity = "";
 
     public void signUp(View view){
         final String email = em.getText().toString();
@@ -42,6 +47,18 @@ public class signUp extends AppCompatActivity {
         String cpassword = cpwd.getText().toString();
         final String schoolName = school.getText().toString();
         final String phone = phoneNumber.getText().toString();
+
+        being.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    identity = being.getSelectedItem().toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                being.requestFocus();
+            }
+        });
 
         final String userName = nme.getText().toString();
 
@@ -79,6 +96,10 @@ public class signUp extends AppCompatActivity {
             phoneNumber.setError("Please enter your Phone Number");
             phoneNumber.requestFocus();
         }
+        else if(identity.isEmpty() || identity.equals("Select Identity")){
+            Toast.makeText(this, "Please enter your Identity", Toast.LENGTH_SHORT).show();
+            being.requestFocus();
+        }
         else{
 
             if (!(cpassword.equals(password))) {
@@ -100,6 +121,7 @@ public class signUp extends AppCompatActivity {
                             user.put("Email", email);
                             user.put("School", schoolName);
                             user.put("Phone Number", phone);
+                            user.put("Identity", identity);
 
                             db.collection("users")
                                     .add(user)
@@ -125,7 +147,7 @@ public class signUp extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(signUp.this, "Sign-up Failed. OO" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(signUp.this,  e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -154,7 +176,11 @@ public class signUp extends AppCompatActivity {
         phoneNumber = findViewById(R.id.phoneNumber);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+        being = findViewById(R.id.spinner);
 
+        ArrayAdapter<String> beingAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.being));
+        beingAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        being.setAdapter(beingAdapter);
 
     }
 }

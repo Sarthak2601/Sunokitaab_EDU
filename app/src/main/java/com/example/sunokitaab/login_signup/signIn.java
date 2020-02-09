@@ -43,7 +43,7 @@ public class signIn extends AppCompatActivity {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
                 if ( firebaseUser != null){
-                    Toast.makeText(signIn.this, "Hi " + firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(signIn.this, "Hi " + firebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
                     Intent signIn = new Intent(signIn.this, MainUi.class);
                     startActivity(signIn);
                 }
