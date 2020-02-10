@@ -250,8 +250,8 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
                 play.setVisibility(View.GONE);
             }
         } else {
-            pause.setVisibility(View.VISIBLE);
-            play.setVisibility(View.GONE);
+            pause.setVisibility(View.GONE);
+            play.setVisibility(View.VISIBLE);
             ste = 0;
         }
 
