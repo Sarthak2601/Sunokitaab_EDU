@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.Sunokitaab.sunokitaab.HomeFragment"
+        android:name="com.sunokitaab.sunokitaab.HomeFragment"
         tools:layout="@layout/fragment_home" />
 <!--    android:label="@string/title_home"-->
 

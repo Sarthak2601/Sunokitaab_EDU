@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:208981243332:android:aab95823ddfe0268796091",
         "android_client_info": {
-          "package_name": "com.example.sunokitaab"
+          "package_name": "com.sunokitaab.sunokitaab"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "208981243332-n1q1gavptjeb7kh6uak91km8feib6733.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.sunokitaab",
+            "package_name": "com.sunokitaab.sunokitaab",
             "certificate_hash": "24b518cc444df7c002bb83e51552694cafd5a7d1"
           }
         },
