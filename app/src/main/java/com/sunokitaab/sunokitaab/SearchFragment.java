@@ -116,6 +116,7 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
 
 
         linearLayoutStories = rootView.findViewById(R.id.llstories);
+        linearLayout1= rootView.findViewById(R.id.ll1);
         linearLayout2= rootView.findViewById(R.id.ll2);
         linearLayout3= rootView.findViewById(R.id.ll3);
         linearLayout4= rootView.findViewById(R.id.ll4);
@@ -246,10 +247,10 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
             public void OnNoteClick(int position) {
                 Intent intent1 = new Intent(getActivity(), Audios.class);
                 if (chaptersStories.get(position).equals("Stories")) {
-                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c0f068ce4127912d62258c05dd74337c");// CLASS 1 ENG
+                    intent1.putExtra("rss", "https://www.podcasts.com/rss_feed/c0f068ce4127912d62258c05dd74337c");// Stories
                     intent1.putExtra("class","Stories");
                 } else if (chaptersStories.get(position).equals("Basic")) {
-                    intent1.putExtra("rss", "http://www.podcasts.com/rss_feed/2338f64e952789e73dac8bccc2b7845f"); // CLASS 1 HIN
+                    intent1.putExtra("rss", "http://www.podcasts.com/rss_feed/2338f64e952789e73dac8bccc2b7845f"); // Basic Learning
                     intent1.putExtra("class","Basic Learning");
                 }
                 startActivity(intent1);
@@ -551,6 +552,7 @@ public class SearchFragment extends Fragment implements ClassSubAdapter12.OnNote
         subjectsMid.clear();
         subjectsHigh.clear();
         subjectsHighHigh.clear();
+        chaptersStories.clear();
 
         super.onDestroy();
     }

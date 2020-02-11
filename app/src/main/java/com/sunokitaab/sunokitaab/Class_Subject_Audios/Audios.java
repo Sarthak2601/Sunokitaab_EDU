@@ -104,32 +104,6 @@ public class Audios extends AppCompatActivity implements FeedAdapter.OnChapterLi
     //RSS link
     private static String RSS_link="";
     String RSS = "";
-/*
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_class6__english);
-//
-//        Bundle bundle = getIntent().getExtras();
-//        if(bundle != null) {
-//            RSS_link = bundle.getString("rss");
-//        }
-//        else{
-//            Toast.makeText(this, "RSS NOT RECEIVED", Toast.LENGTH_SHORT).show();
-//        }
-//        //Toast.makeText(this, "" + RSS_link, Toast.LENGTH_SHORT).show();
-//        //Intent intent = getIntent();
-//        //RSS_link = intent.getStringExtra("rss");
-//        recyclerView = findViewById(R.id.class6EnglishRecycler);
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//       // adapter = new FeedAdapter(rssObject,getBaseContext());
-//        //recyclerView.setAdapter(adapter);
-//
-//        loadRSS();
-//
-//    }
-    */
 
     private void loadRSS() {
         AsyncTask<String,String,String> loadRSSAsync = new AsyncTask<String, String, String>() {
