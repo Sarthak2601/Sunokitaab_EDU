@@ -1,2 +1,2 @@
 # Sunokitaab Education
-Audio Player App
+Educational Audio Library App, currently for RBSE courses. 
