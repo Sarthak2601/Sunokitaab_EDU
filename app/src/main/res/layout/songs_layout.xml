@@ -8,16 +8,32 @@
     <LinearLayout
         android:background="@android:color/white"
         android:layout_width="match_parent"
+        android:weightSum="100"
         android:layout_height="match_parent">
-
+    <LinearLayout
+        android:id="@+id/audiotitle"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_weight="20"
+        android:layout_height="match_parent">
         <TextView
             android:layout_margin="20dp"
-            android:id="@+id/textView"
+            android:id="@+id/downloaded_audioname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:textColor="@android:color/black"/>
 
+    </LinearLayout>
+
+        <Button
+            android:id="@+id/delButton"
+            android:layout_width="match_parent"
+            android:layout_margin="7dp"
+            android:layout_marginRight="30dp"
+            android:layout_height="match_parent"
+            android:layout_weight="83"
+            android:background="@drawable/ic_delete_black_24dp"/>
 
     </LinearLayout>
 
